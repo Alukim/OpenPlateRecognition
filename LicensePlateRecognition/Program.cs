@@ -1,4 +1,5 @@
-﻿using OpenCvSharp;
+﻿using LicensePlateRecognition.Utilities;
+using OpenCvSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -66,12 +67,11 @@ namespace LicensePlateRecognition
 
         private static void MainFunction(string imageUrl)
         {
-            // First step is to load new image.
             var image = ImageRepository.LoadImage(imageUrl);
             var imageNameWithoutExtension = Path.GetFileNameWithoutExtension(imageUrl);
-            //Cv2.ImShow("Original", image);
-            //Cv2.WaitKey(0);
-            // Next we must do some preprocessing (From RGB image, to GrayScale, Blur, threshold). Also we can do some magic with contrast. Maybe maximize constrast with top hat and black hat. I don't know. 
+            Cv2.ImShow("Original", image);
+            Cv2.WaitKey(0);
+            
             var plates = DetectPlates.DetectPlatesInScene(image);
             ResizePlatesIfNeeded(plates);
             var platesWithChars = DetectChars.DetectCharsInPlates(plates).ToList();
@@ -95,7 +95,7 @@ namespace LicensePlateRecognition
                 {
                     File.Delete($"{i.ToString()}.png");                    
                 }
-                catch (System.Exception)
+                catch (Exception)
                 {
                 }
             }
@@ -132,10 +132,9 @@ namespace LicensePlateRecognition
         {
             foreach (var plate in licPlates)
             {
-                var p2fRectPoints = plate.RrLocationOfPlateInScene.Points();            // get 4 vertices of rotated rect
-
+                var p2fRectPoints = plate.RrLocationOfPlateInScene.Points();            
                 for (int i = 0; i < 4; i++)
-                {                                       // draw 4 red lines
+                {
                     Cv2.Line(imgOriginalScene, p2fRectPoints[i], p2fRectPoints[(i + 1) % 4], ScalarBlue, 2);
                 }
             }

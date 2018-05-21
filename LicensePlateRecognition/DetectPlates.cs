@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace LicensePlateRecognition
@@ -14,16 +13,11 @@ namespace LicensePlateRecognition
         public static List<PossiblePlate> DetectPlatesInScene(this Mat image)
         {
             var preprocessedImage = image.ImagePreprocessing();
-            //Cv2.ImShow("Preprocessed image", preprocessedImage);
+            Cv2.ImShow("Preprocessed image", preprocessedImage);
 
-            // Find possible chars (In this step, first we found all contours on Threshold image next, we doing some first filtering of chars `CheckIfPossibleChar`)
             var listOfPossibleCharsInScene = FindPossibleCharsInScene(preprocessedImage);
 
-            //Ok, now we have list of possible chars on scene. We want to group it into List of List of PossibleChars. 
             var groupedListOfPossibleChars = FindListOfGroupOfMatchingChars(listOfPossibleCharsInScene);
-
-            //Console.WriteLine($"step 3 - vectorOfVectorsOfMatchingCharsInScene.size() = {groupedListOfPossibleChars.Count}");
-            // 13 with MCLRNF1 image
 
             var imgContours = new Mat(image.Size(), MatType.CV_8UC3, Program.ScalarBlack);
             var listOfPossiblePlates = new List<PossiblePlate>();
@@ -43,9 +37,7 @@ namespace LicensePlateRecognition
                     listOfPossiblePlates.Add(possiblePlate);
             }
 
-            //Console.WriteLine($"{listOfPossiblePlates.Count()} possible plates found.");
-
-            //Cv2.ImShow("Group of countours", imgContours);
+            Cv2.ImShow("Group of countours", imgContours);
 
             for (var i = 0; i < listOfPossiblePlates.Count; ++i)
             {
@@ -55,15 +47,13 @@ namespace LicensePlateRecognition
                 {
                     Cv2.Line(imgContours, p2fRectPoints[j], p2fRectPoints[(j + 1) % 4], Program.ScalarBlue, 2);
                 }
-                //Cv2.ImShow("4a", imgContours);
+                Cv2.ImShow("4a", imgContours);
 
-                //Cv2.ImShow("4b", listOfPossiblePlates[i].ImgPlate);
-                //Cv2.WaitKey(0);
+                Cv2.ImShow("4b", listOfPossiblePlates[i].ImgPlate);
+                Cv2.WaitKey(0);
             }
-            //std::cout << std::endl << "plate detection complete, click on any image and press a key to begin char recognition . . ." << std::endl << std::endl;
-            //Cv2.ImShow("Founded plates", imgContours);
-            //Cv2.ImShow("Plate", listOfPossiblePlates.First().ImgPlate);
-            //Cv2.WaitKey(0);
+
+            Cv2.WaitKey(0);
 
             return listOfPossiblePlates;
         }
@@ -234,7 +224,6 @@ namespace LicensePlateRecognition
 
             var listOfPossibleChars = new List<PossibleChar>();
 
-            //ThreadPool.GetAvailableThreads(out var threadsCount, out var completionPortThreads);
             var threadsCount = 8;
             var contoursCountPerThread = foundedContours.Length / threadsCount;
             var rest = foundedContours.Length % threadsCount;
@@ -261,7 +250,6 @@ namespace LicensePlateRecognition
 
             var test = listOfPossibleChars.Select(x => x.Contour).ToArray();
             Cv2.DrawContours(imageContours, test, -1, Program.ScalarWhite);
-            //Cv2.ImShow("Contours 1B", imageContours);
 
             return listOfPossibleChars;
         }
