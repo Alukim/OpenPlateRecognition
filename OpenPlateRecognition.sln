@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LicensePlateRecognition", "LicensePlateRecognition\LicensePlateRecognition.csproj", "{FB72D2A4-58EF-4E8C-AC30-36BFDF7134E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenPlateRecognition", "OpenPlateRecognition\OpenPlateRecognition.csproj", "{FB72D2A4-58EF-4E8C-AC30-36BFDF7134E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
